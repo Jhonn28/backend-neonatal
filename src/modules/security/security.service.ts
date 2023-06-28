@@ -1284,7 +1284,7 @@ export class SecurityService {
    */
   async getInfoSucursal(sucursal: number) {
     const sql = `
-    select nro_distrito||' - '||nombre_segdis as distrito,nombre_seges as establecimiento, direccion_seges as direccion,
+    select e.ide_thtipes as tipo,nro_distrito||' - '||nombre_segdis as distrito,nombre_seges as establecimiento, direccion_seges as direccion,
     detalle_thprov as provincia, detalle_thciu as ciudad,detalle_thtipes as tipo_establecimiento,
 	  concat_ws('-',cedula_responsable_segdis,responsable_segdis) as responsable_distrito,
 	  concat_ws('-',cedula_responsable_seges,responsable_seges) as responsable_establecimiento,detalle_thento as unidad_operativa

@@ -60,9 +60,9 @@ export class IndicadorService {
       from her_encabezado_general a, ind_tiempo b
       where a.ide_indtp=b.ide_indtp and a.ide_indtp=${ide_indtp} and extract(year from date(fecha_medicion_heg))= extract(year from date('${fecha_medicion_hlic}'))`
 
-      
+
       const registros = await this.poolService.consult(sql);
-      if(registros[0].registros>0){
+      if (registros[0].registros > 0) {
         return {
           success: false,
           message: 'Ya se encuentra registrado el indicador en el mes establecido.',
@@ -135,9 +135,12 @@ export class IndicadorService {
   }
 
   //Tiempo
-  async getTiempo() {
+  async getTiempo(condition: string) {
     let sql = `select ide_indtp as value, detalle_indtp as label
-    from ind_tiempo`;
+    from ind_tiempo where 1=1`;
+    if(condition){
+      sql+=` and ${condition}`
+    }
     try {
 
       const data = await this.poolService.consult(sql);
@@ -214,9 +217,9 @@ export class IndicadorService {
       from her_encabezado_general a, ind_tiempo b
       where a.ide_indtp=b.ide_indtp and a.ide_indtp=${cabecera.ide_indtp} and extract(year from date(fecha_medicion_heg))= extract(year from date('${cabecera.fecha_medicion_heg}')) and nro_herramienta_heg='${cabecera.nro_herramienta_heg}'`
 
-      
+
       const registros = await this.poolService.consult(sql);
-      if(registros[0].registros>0){
+      if (registros[0].registros > 0) {
         return {
           success: false,
           message: 'Ya se encuentra registrado el indicador en el mes establecido.',
@@ -274,29 +277,29 @@ export class IndicadorService {
 
   //updateIndicador 
 
-  async update(body, tabla1: string, condition1:string, tabla2: string,condition2: string, indicador:string,tabla3: string,condition3:string) {
+  async update(body, tabla1: string, condition1: string, tabla2: string, condition2: string, indicador: string, tabla3: string, condition3: string) {
     try {
       //console.log(body);
       const { cabecera, indicadores, promedio } = body;
-      const ide1= cabecera[condition1];
+      const ide1 = cabecera[condition1];
       delete cabecera[condition1];
       //console.log('encabezado: ',ide1);
-      await this.poolService.update(tabla1,cabecera,[{condition: condition1+'='+ide1,values:[ide1]}])
+      await this.poolService.update(tabla1, cabecera, [{ condition: condition1 + '=' + ide1, values: [ide1] }])
 
       indicadores.forEach(async element => {
-      const ide2 = element[condition2];
+        const ide2 = element[condition2];
         delete element[indicador];
         delete element[condition2];
-      await this.poolService.update(tabla2,element,[{condition: condition2+'='+ide2,values:[ide2]}])
+        await this.poolService.update(tabla2, element, [{ condition: condition2 + '=' + ide2, values: [ide2] }])
       });
       if (tabla3) {
-        console.log('ta3=',tabla3,'c3=',condition3);
-        console.log('promedio=',promedio);
+        console.log('ta3=', tabla3, 'c3=', condition3);
+        console.log('promedio=', promedio);
 
         const ide3 = promedio[condition3];
         delete promedio[condition3];
-        await this.poolService.update(tabla3,promedio,[{condition: condition3+'='+ide3,values:[ide3]}])
-  
+        await this.poolService.update(tabla3, promedio, [{ condition: condition3 + '=' + ide3, values: [ide3] }])
+
       }
 
       return {
@@ -319,18 +322,18 @@ export class IndicadorService {
   /* TODO: Buscar los indicadores  */
   //1A
   //
-  async getIUnoA(distrito: number, establecimiento:number) {
+  async getIUnoA(distrito: number, establecimiento: number) {
     let sql = `select * from her_lista_chequeo
     where ide_segdis=$1`;
 
-    if(establecimiento){
-      sql+=` and ide_seges=${establecimiento}`
+    if (establecimiento) {
+      sql += ` and ide_seges=${establecimiento}`
     }
-    sql+="  order by ide_hlic desc"
-    
+    sql += "  order by ide_hlic desc"
+
     try {
 
-      const data = await this.poolService.consult(sql,[distrito]);
+      const data = await this.poolService.consult(sql, [distrito]);
       return {
         success: true,
         data
@@ -344,16 +347,16 @@ export class IndicadorService {
     }
   }
 
-  async getDataUnoA(ide:number,area: number){
+  async getDataUnoA(ide: number, area: number) {
     const sql = `select * from her_indicador_lista_chequeo
     where ide_hlic=$1 and ide_indare=$2
     order by ide_indare asc,ide_indins asc`;
 
 
-    
+
     try {
 
-      const data = await this.poolService.consult(sql,[ide,area]);
+      const data = await this.poolService.consult(sql, [ide, area]);
       return {
         success: true,
         data
@@ -367,20 +370,20 @@ export class IndicadorService {
     }
   }
 
-  async getEncabezadoGeneral(distrito: number,herramienta: string, establecimiento:number) {
+  async getEncabezadoGeneral(distrito: number, herramienta: string, establecimiento: number) {
 
     let sql = `select * from her_encabezado_general
     where ide_segdis=$1 and nro_herramienta_heg=$2`;
 
-    if(establecimiento){
-      sql+=` and ide_seges=${establecimiento}`
+    if (establecimiento) {
+      sql += ` and ide_seges=${establecimiento}`
     }
 
-    sql+="  order by ide_heg desc"
-    
+    sql += "  order by ide_heg desc"
+
     try {
 
-      const data = await this.poolService.consult(sql,[distrito,herramienta]);
+      const data = await this.poolService.consult(sql, [distrito, herramienta]);
       return {
         success: true,
         data
@@ -394,14 +397,38 @@ export class IndicadorService {
     }
   }
 
-  async getDataIndicador(tabla:string,encabezado:number,orden:string) {
+  async getDataIndicador(tabla: string, encabezado: number, orden: string) {
 
     let sql = `select * from ${tabla}
     where ide_heg=$1
     order by ${orden}`;
-   
+
     try {
-      const data = await this.poolService.consult(sql,[encabezado]);
+      const data = await this.poolService.consult(sql, [encabezado]);
+      return {
+        success: true,
+        data
+      }
+    } catch (error) {
+      throw new BadRequestException({
+        success: false,
+        message: 'Error al consultar',
+        error
+      });
+    }
+  }
+
+
+  async getPorcentajeComplicacion(establecimiento: number, anio: string) {
+
+    try {
+      let sql = `select * from her_porcentaje_complicaciones where ide_heg=(select ide_heg from her_encabezado_general
+        where nro_herramienta_heg='12' and ide_seges=$1
+        and extract(year from date(fecha_medicion_heg))= $2
+        order by ide_heg desc limit 1)`;
+      const data = await this.poolService.consult(sql, [establecimiento, anio]);
+      
+
       return {
         success: true,
         data

@@ -34,8 +34,8 @@ export class IndicadorController {
   //
   @UseGuards(JwtAuthGuard)
   @Get('tiempo')
-  getTiempo() {
-    return this.indicadorService.getTiempo();
+  getTiempo(@Query('condition') condition: string) {
+    return this.indicadorService.getTiempo(condition);
   }
 
   //
@@ -90,6 +90,13 @@ export class IndicadorController {
   updateData(@Body() data:CreateHerramientaDto,@Param('tabla1') tabla1:string,@Param('condition') condition:string,@Param('tabla2') tabla2:string,@Param('condition2') condition2:string,@Param('indicador') indicador:string,@Query('tabla3') tabla3: string,@Query('condition3') condition3: string) {
     return this.indicadorService.update(data,tabla1,condition,tabla2,condition2,indicador,tabla3,condition3);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('porcentaje-complicacion/:establecimiento/:anio')
+  getPorcentajeComplicacion(@Param('establecimiento') establecimiento: number,@Param('anio') anio: string) {
+    return this.indicadorService.getPorcentajeComplicacion(establecimiento,anio);
+  }
+
 
 
 
