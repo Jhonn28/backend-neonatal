@@ -4,6 +4,7 @@
 /test
 *.pbd
 *.zip
+*.rar
 # Logs
 logs
 *.log
