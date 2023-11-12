@@ -1286,8 +1286,8 @@ export class SecurityService {
     const sql = `
     select e.ide_thtipes as tipo,nro_distrito||' - '||nombre_segdis as distrito,nombre_seges as establecimiento, direccion_seges as direccion,
     detalle_thprov as provincia, detalle_thciu as ciudad,detalle_thtipes as tipo_establecimiento,
-	  concat_ws('-',cedula_responsable_segdis,responsable_segdis) as responsable_distrito,
-	  concat_ws('-',cedula_responsable_seges,responsable_seges) as responsable_establecimiento,detalle_thento as unidad_operativa
+	  responsable_segdis as responsable_distrito,
+	  cedula_responsable_seges,responsable_seges as responsable_establecimiento,detalle_thento as unidad_operativa
     from seg_establecimiento a, seg_distrito b, th_provincia c, th_ciudad d, th_tipo_establecimiento e,th_entidad_operativa f
     where a.ide_segdis=b.ide_segdis and b.ide_thprov = c.ide_thprov and d.ide_thciu = a.ide_thciu and a.ide_thtipes=e.ide_thtipes
 	  and a.ide_thento=f.ide_thento and ide_seges=$1`;

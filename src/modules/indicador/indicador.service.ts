@@ -323,7 +323,7 @@ export class IndicadorService {
   //1A
   //
   async getIUnoA(distrito: number, establecimiento: number) {
-    let sql = `select ide_hlic,establecimiento_hlic,fecha_medicion_hlic,distrito_hlic,ide_seges,ide_segdis,promedio_preparacion_hlic,
+    let sql = `select b.ide_indtp,ide_hlic,establecimiento_hlic,fecha_medicion_hlic,distrito_hlic,ide_seges,ide_segdis,promedio_preparacion_hlic,
     promedio_preparacion_hlic,promedio_farmacia_hlic,promedio_laboratorio_hlic,promedio_servicio_hlic,promedio_charol_hlic,
     promedio_atencion_parto_hlic,promedio_atencion_nacido_hlic,items_cumple_hlic,total_items_hlic,porcentaje_estandar_hlic,
     detalle_indtp
@@ -376,7 +376,7 @@ export class IndicadorService {
 
   async getEncabezadoGeneral(distrito: number, herramienta: string, establecimiento: number) {
 
-    let sql = `select ide_heg,ide_segdis,ide_seges,detalle_indtp,distrito_heg,unidad_operativa_heg,fecha_medicion_heg,numerador_heg,denominador_heg,
+    let sql = `select b.ide_indtp,ide_heg,ide_segdis,ide_seges,detalle_indtp,distrito_heg,unidad_operativa_heg,fecha_medicion_heg,numerador_heg,denominador_heg,
     porcentaje_heg,nro_herramienta_heg,ide_thas
     from her_encabezado_general a, ind_tiempo b
     where a.ide_indtp=b.ide_indtp and ide_segdis=$1 and nro_herramienta_heg=$2`;

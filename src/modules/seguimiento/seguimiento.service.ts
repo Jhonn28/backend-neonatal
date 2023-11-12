@@ -852,7 +852,8 @@ export class SeguimientoService {
       data.acuerdos_compromisos=acuerdos_compromisos;
       data.observaciones_generales=observaciones_generales;
       data.responsables=responsables;
-    
+
+    console.log(data);
 
       return {
         success: true,
