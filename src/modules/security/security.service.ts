@@ -71,11 +71,11 @@ export class SecurityService {
    * Retorna los datos del usuario autentificado
    */
   async getUserAutenticated(user: number) {
-    let sql = `select ide_segusu,a.ide_segper,nombre_segusu,username_segusu,correo_segusu,fecha_reg_segusu,
+    let sql = `select a.ide_segusu,a.ide_segper,nombre_segusu,username_segusu,correo_segusu,fecha_reg_segusu,
     activo_segusu,tema_segusu,bloqueado_segusu,fecha_caduc_segusu,cambia_clave_segusu,
-    admin_multi_segusu,reset_send_segusu,nombre_segper
-    from seg_usuario a, seg_perfil b
-    where a.ide_segper=b.ide_segper and ide_segusu=$1`;
+    admin_multi_segusu,reset_send_segusu,nombre_segper,responsable_seges
+    from seg_usuario a, seg_perfil b,seg_usuario_multisucursal c,seg_establecimiento d
+    where a.ide_segper=b.ide_segper and a.ide_segusu=c.ide_segusu and c.ide_seges=d.ide_seges and a.ide_segusu=$1`;
     try {
       return await this.poolService.consult(sql, [user]);
     } catch (error) {
