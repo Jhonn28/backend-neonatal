@@ -47,7 +47,7 @@ export class PoolService {
          */// console.log('ejecuto este sl ', sql);
 
         //console.log(nombreTabla);
-         console.log(parameters);
+         //console.log(parameters);
          /*console.log(condiciones); */
         return await this.queryRunner.createQueryBuilder()
             .update(nombreTabla)

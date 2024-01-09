@@ -97,6 +97,12 @@ export class IndicadorController {
     return this.indicadorService.getPorcentajeComplicacion(establecimiento,anio);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('puntaje/:establecimiento')
+  GetPuntaje(@Param('establecimiento') establecimiento: number) {
+    return this.indicadorService.getPuntaje(establecimiento);
+  }
+
 
 
 

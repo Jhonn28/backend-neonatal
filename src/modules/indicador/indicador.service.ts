@@ -448,6 +448,57 @@ export class IndicadorService {
     }
   }
 
+  //obtiene el ultimo puntaje de todos los indicadores
+  
+  async getPuntaje(ide: number) {
+    let array = {
+      'unoNueve': [],
+      'diez':[],
+      'once':[],
+      'doce':[],
+      'trece':[]
+    }
+
+    let sql = `select porcentaje_estandar_hlic as porcentaje
+    from her_lista_chequeo where ide_seges=$1 order by ide_hlic desc limit 1;`
+    let consult = await this.poolService.consult(sql,[ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='2' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql,[ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='3a' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql,[ide]);
+    array.unoNueve.push(consult[0]);
+
+    
+
+
+
+
+
+    console.log(consult);
+  
+    
+  
+    
+    try {
+      const data = array;
+      return {
+        success: true,
+        data
+      };
+    } catch (error) {
+      throw new BadRequestException({
+        success: false,
+        message: 'Error al ejecutar query'
+      });
+    }
+  }
+
 
 
 
