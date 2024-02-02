@@ -104,7 +104,23 @@ export class IndicadorController {
   }
 
 
+  @UseGuards(JwtAuthGuard)
+  @Get('reporte-distrito/:distrito/:anio')
+  getReporteDistrito(@Param('anio') anio: string,@Param('distrito') distrito: number) {
+    return this.indicadorService.getReporteDistrito(anio,distrito);
+  }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('reporte-zonal/:anio')
+  getReporteZonal(@Param('anio') anio: string) {
+    return this.indicadorService.getReporteZonal(anio);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('historico')
+  getHistorico() {
+    return this.indicadorService.getHistorico();
+  }
 
 
 

@@ -138,8 +138,8 @@ export class IndicadorService {
   async getTiempo(condition: string) {
     let sql = `select ide_indtp as value, detalle_indtp as label
     from ind_tiempo where 1=1`;
-    if(condition){
-      sql+=` and ${condition}`
+    if (condition) {
+      sql += ` and ${condition}`
     }
     try {
 
@@ -433,7 +433,7 @@ export class IndicadorService {
         and extract(year from date(fecha_medicion_heg))= $2
         order by ide_heg desc limit 1)`;
       const data = await this.poolService.consult(sql, [establecimiento, anio]);
-      
+
 
       return {
         success: true,
@@ -449,42 +449,129 @@ export class IndicadorService {
   }
 
   //obtiene el ultimo puntaje de todos los indicadores
-  
+
   async getPuntaje(ide: number) {
     let array = {
       'unoNueve': [],
-      'diez':[],
-      'once':[],
-      'doce':[],
-      'trece':[]
+      'diez': Number,
+      'once': Number,
+      'doce': Number,
+      'trece': Number
     }
 
     let sql = `select porcentaje_estandar_hlic as porcentaje
     from her_lista_chequeo where ide_seges=$1 order by ide_hlic desc limit 1;`
-    let consult = await this.poolService.consult(sql,[ide]);
+    let consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
     sql = `select porcentaje_heg as porcentaje
     from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='2' order by ide_heg desc limit 1;`
-    consult = await this.poolService.consult(sql,[ide]);
+    consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
     sql = `select porcentaje_heg as porcentaje
     from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='3a' order by ide_heg desc limit 1;`
-    consult = await this.poolService.consult(sql,[ide]);
+    consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='3b' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
 
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='4' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
 
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='5' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
 
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='6' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
 
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='7a' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='7b' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8a' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8b' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8c' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8d' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8e' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8f' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='9a' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='9b' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='9c' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.unoNueve.push(consult[0]);
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='10' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.diez = consult[0];
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='11' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.once = consult[0];
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='12' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.doce = consult[0];
+
+    sql = `select porcentaje_heg as porcentaje
+    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='13' order by ide_heg desc limit 1;`
+    consult = await this.poolService.consult(sql, [ide]);
+    array.trece = consult[0];
 
     console.log(consult);
-  
-    
-  
-    
+
+
     try {
       const data = array;
       return {
@@ -498,6 +585,166 @@ export class IndicadorService {
       });
     }
   }
+
+  async getReporteDistrito(anio: string, ide: number) {
+    let array = new Array();
+    let sql = `SELECT
+    '1' as indicador,
+    COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=13 THEN a.items_cumple_hlic END)),0) AS numerador_trimestre_1,
+    COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=13 THEN a.total_items_hlic END)),0) AS denominador_trimestre_1,
+    COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=14 THEN a.items_cumple_hlic END)),0) AS numerador_trimestre_2,
+    COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=14 THEN a.total_items_hlic END)),0) AS denominador_trimestre_2,
+    COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=15 THEN a.items_cumple_hlic END)),0) AS numerador_trimestre_3,
+    COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=15 THEN a.total_items_hlic END)),0) AS denominador_trimestre_3,
+    COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=16 THEN a.items_cumple_hlic END)),0) AS numerador_trimestre_4,
+    COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=16 THEN a.total_items_hlic END)),0) AS denominador_trimestre_4
+FROM
+    her_lista_chequeo a, ind_tiempo b
+WHERE a.ide_indtp = b.ide_indtp  and extract(year from date(fecha_medicion_hlic))=$1 and a.ide_segdis=$2
+GROUP BY
+    indicador
+ORDER BY
+    indicador asc;`
+    const consult_1 = await this.poolService.consult(sql, [anio, ide]);
+
+    sql = `SELECT
+    a.nro_herramienta_heg as indicador,
+    COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 1 AND 3 THEN a.numerador_heg END),0) AS numerador_trimestre_1,
+    COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 1 AND 3 THEN a.denominador_heg END),0) AS denominador_trimestre_1,
+    COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 4 AND 6 THEN a.numerador_heg END),0) AS numerador_trimestre_2,
+    COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 4 AND 6 THEN a.denominador_heg END),0) AS denominador_trimestre_2,
+    COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 7 AND 9 THEN a.numerador_heg END),0) AS numerador_trimestre_3,
+    COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 7 AND 9 THEN a.denominador_heg END),0) AS denominador_trimestre_3,
+    COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 10 AND 12 THEN a.numerador_heg END),0) AS numerador_trimestre_4,
+    COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 10 AND 12 THEN a.denominador_heg END),0) AS denominador_trimestre_4
+FROM
+    her_encabezado_general a, ind_tiempo b
+WHERE a.ide_indtp = b.ide_indtp and a.ide_indtp<13 and nro_herramienta_heg != '8' and extract(year from date(fecha_medicion_heg))=$1 and a.ide_segdis=$2
+GROUP BY
+    indicador
+ORDER BY
+    indicador asc;`
+    const consult_2 = await this.poolService.consult(sql, [anio, ide]);
+
+    sql = `SELECT
+    a.nro_herramienta_heg as indicador,
+   	0 AS numerador_trimestre_1,
+   	0 AS denominador_trimestre_1,
+    COALESCE(SUM(CASE WHEN b.ide_indtp=17 THEN a.numerador_heg END),0) AS numerador_trimestre_2,
+    COALESCE(SUM(CASE WHEN b.ide_indtp=17 THEN a.denominador_heg END),0) AS denominador_trimestre_2,
+    0 AS numerador_trimestre_3,
+    0 AS denominador_trimestre_3,
+    COALESCE(SUM(CASE WHEN b.ide_indtp=18 THEN a.numerador_heg END),0) AS numerador_trimestre_4,
+    COALESCE(SUM(CASE WHEN b.ide_indtp=18 THEN a.denominador_heg END),0) AS denominador_trimestre_4
+FROM
+    her_encabezado_general a, ind_tiempo b
+	WHERE a.ide_indtp = b.ide_indtp and a.ide_indtp in (17,18) and extract(year from date(fecha_medicion_heg))=$1 and ide_segdis=$2
+GROUP BY
+    indicador
+ORDER BY
+    indicador asc;`
+    const consult_3 = await this.poolService.consult(sql, [anio, ide]);
+
+    array = [...consult_1, ...consult_2, ...consult_3]
+
+
+    try {
+      const data = array;
+      return {
+        success: true,
+        data
+      };
+    } catch (error) {
+      throw new BadRequestException({
+        success: false,
+        message: 'Error al ejecutar query'
+      });
+    }
+  }
+
+  async getReporteZonal(anio: string) {
+
+    let sql = `select detalle_thprov as provincia, nro_distrito as distrito, 
+    ROUND(COALESCE(AVG(porcentaje_estandar_hlic),0),2) as promedio_1,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '2' THEN porcentaje_heg END), 0),2) AS dos,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '3a' THEN porcentaje_heg END), 0),2) AS tres_a,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '3b' THEN porcentaje_heg END), 0),2) AS tres_b,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '4' THEN porcentaje_heg END), 0),2) AS cuatro,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '5' THEN porcentaje_heg END), 0),2) AS cinco,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '6' THEN porcentaje_heg END), 0),2) AS seis,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '7a' THEN porcentaje_heg END), 0),2) AS siete_a,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '7b' THEN porcentaje_heg END), 0),2) AS siete_b,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '8a' THEN porcentaje_heg END), 0),2) AS ocho_a,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '8b' THEN porcentaje_heg END), 0),2) AS ocho_b,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '8c' THEN porcentaje_heg END), 0),2) AS ocho_c,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '8d' THEN porcentaje_heg END), 0),2) AS ocho_d,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '8e' THEN porcentaje_heg END), 0),2) AS ocho_e,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '8f' THEN porcentaje_heg END), 0),2) AS ocho_f,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '9a' THEN porcentaje_heg END), 0),2) AS nueve_a,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '9b' THEN porcentaje_heg END), 0),2) AS nueve_b,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '9c' THEN porcentaje_heg END), 0),2) AS nueve_c,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '10' THEN porcentaje_heg END), 0),2) AS diez,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '11' THEN porcentaje_heg END), 0),2) AS once,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '12' THEN porcentaje_heg END), 0),2) AS doce,
+    ROUND(COALESCE(AVG(CASE WHEN nro_herramienta_heg = '13' THEN porcentaje_heg END), 0),2) AS trece
+    from her_encabezado_general a, seg_distrito b, th_provincia c,her_lista_chequeo d
+    where a.ide_segdis=b.ide_segdis and b.ide_thprov=c.ide_thprov and d.ide_segdis=b.ide_segdis and extract(year from date(fecha_medicion_heg))=$1
+    group by provincia,distrito`
+    const consult = await this.poolService.consult(sql, [anio]);
+
+
+
+    try {
+      return {
+        success: true,
+        data: consult
+      };
+    } catch (error) {
+      throw new BadRequestException({
+        success: false,
+        message: 'Error al ejecutar query'
+      });
+    }
+  }
+
+
+  async getHistorico() {
+    let array = new Array();
+    let sql = `select 3 as zona, provincia_hlic as provincia, distrito_hlic as distrito,establecimiento_hlic as establecimiento,
+    fecha_medicion_hlic as fecha_medicion, detalle_indtp as periodo, '1a' as indicador, responsable_medicion_hlic,items_cumple_hlic as numerador,
+    total_items_hlic as denominador, porcentaje_estandar_hlic as porcentaje
+    from her_lista_chequeo a, ind_tiempo b
+    where a.ide_indtp=b.ide_indtp`
+    const consult_1 = await this.poolService.consult(sql);
+
+    sql = `select 3 as zona, provincia_heg as provincia, distrito_heg as distrito,unidad_operativa_heg as establecimiento,
+    fecha_medicion_heg as fecha_medicion, detalle_indtp as periodo, responsable_medicion_heg as responsable,nro_herramienta_heg as indicador, 
+    numerador_heg as numerador,denominador_heg as denominador, porcentaje_heg as porcentaje
+    from her_encabezado_general a, ind_tiempo b
+    where a.ide_indtp=b.ide_indtp`
+    const consult_2 = await this.poolService.consult(sql);
+
+
+
+    array = [...consult_1, ...consult_2]
+
+
+    try {
+      const data = array;
+      return {
+        success: true,
+        data
+      };
+    } catch (error) {
+      throw new BadRequestException({
+        success: false,
+        message: 'Error al ejecutar query'
+      });
+    }
+  }
+
+
+
 
 
 
