@@ -5,7 +5,7 @@
   "port": 5432,
   "username": "postgres",
   "password": "postgres",
-  "database": "materno_neonatal",
+  "database": "materno",
   "logging": ["error"],
   "logger": "file"
  

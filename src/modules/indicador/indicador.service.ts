@@ -215,7 +215,7 @@ export class IndicadorService {
 
       const sql = `select count(ide_heg) as registros
       from her_encabezado_general a, ind_tiempo b
-      where a.ide_indtp=b.ide_indtp and a.ide_indtp=${cabecera.ide_indtp} and extract(year from date(fecha_medicion_heg))= extract(year from date('${cabecera.fecha_medicion_heg}')) and nro_herramienta_heg='${cabecera.nro_herramienta_heg}'`
+      where a.ide_indtp=b.ide_indtp and a.ide_indtp=${cabecera.ide_indtp} and extract(year from date(fecha_medicion_heg))= extract(year from date('${cabecera.fecha_medicion_heg}')) and nro_herramienta_heg='${cabecera.nro_herramienta_heg}' and ide_seges=${cabecera.ide_seges}`
 
 
       const registros = await this.poolService.consult(sql);
