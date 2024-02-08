@@ -1483,6 +1483,8 @@ export class SecurityService {
       sql += ` and a.unicodigo_seges=${unicodigo}`
     } else if (distrito) {
       sql += ` and upper(b.nro_distrito) = upper('${distrito}') limit 1`
+    }else{
+      sql+=' limit 1'
     }
 
     try {

@@ -323,17 +323,29 @@ export class IndicadorService {
   //1A
   //
   async getIUnoA(distrito: number, establecimiento: number) {
-    let sql = `select b.ide_indtp,ide_hlic,establecimiento_hlic,fecha_medicion_hlic,distrito_hlic,ide_seges,ide_segdis,promedio_preparacion_hlic,
-    promedio_preparacion_hlic,promedio_farmacia_hlic,promedio_laboratorio_hlic,promedio_servicio_hlic,promedio_charol_hlic,
-    promedio_atencion_parto_hlic,promedio_atencion_nacido_hlic,items_cumple_hlic,total_items_hlic,porcentaje_estandar_hlic,
-    detalle_indtp
-    from her_lista_chequeo a, ind_tiempo b
-    where a.ide_indtp=b.ide_indtp and ide_segdis=$1`;
+    let sql = '';
 
     if (establecimiento) {
-      sql += ` and ide_seges=${establecimiento}`
+      sql = ` select b.ide_indtp,ide_hlic,establecimiento_hlic,fecha_medicion_hlic,distrito_hlic,ide_seges,ide_segdis,promedio_preparacion_hlic,
+      promedio_preparacion_hlic,promedio_farmacia_hlic,promedio_laboratorio_hlic,promedio_servicio_hlic,promedio_charol_hlic,
+      promedio_atencion_parto_hlic,promedio_atencion_nacido_hlic,items_cumple_hlic,total_items_hlic,porcentaje_estandar_hlic,
+      detalle_indtp
+      from her_lista_chequeo a, ind_tiempo b
+      where a.ide_indtp=b.ide_indtp and ide_segdis=$1 and ide_seges=${establecimiento}`
+    }else{
+      sql = `SELECT b.ide_indtp,ide_hlic,establecimiento_hlic,fecha_medicion_hlic,distrito_hlic,ide_seges,ide_segdis,promedio_preparacion_hlic,
+      promedio_preparacion_hlic,promedio_farmacia_hlic,promedio_laboratorio_hlic,promedio_servicio_hlic,promedio_charol_hlic,
+      promedio_atencion_parto_hlic,promedio_atencion_nacido_hlic,items_cumple_hlic,total_items_hlic,porcentaje_estandar_hlic,
+      detalle_indtp
+  FROM (
+      SELECT *,
+             ROW_NUMBER() OVER (PARTITION BY establecimiento_hlic ORDER BY fecha_medicion_hlic DESC) AS rn
+      FROM her_lista_chequeo
+  ) AS subconsulta
+  inner join ind_tiempo b on b.ide_indtp=subconsulta.ide_indtp
+  WHERE rn = 1 and ide_segdis=$1`
     }
-    sql += "  order by ide_hlic desc"
+    sql += "  order by ide_hlic,ide_indtp desc"
 
     try {
 
@@ -376,16 +388,28 @@ export class IndicadorService {
 
   async getEncabezadoGeneral(distrito: number, herramienta: string, establecimiento: number) {
 
-    let sql = `select b.ide_indtp,ide_heg,ide_segdis,ide_seges,detalle_indtp,distrito_heg,unidad_operativa_heg,fecha_medicion_heg,numerador_heg,denominador_heg,
-    porcentaje_heg,nro_herramienta_heg,ide_thas
-    from her_encabezado_general a, ind_tiempo b
-    where a.ide_indtp=b.ide_indtp and ide_segdis=$1 and nro_herramienta_heg=$2`;
+    let sql = ``;
 
     if (establecimiento) {
-      sql += ` and ide_seges=${establecimiento}`
+      sql += ` select  ide_heg,b.ide_indtp,fecha_medicion_heg as fecha,nro_herramienta_heg as indicador,unidad_operativa_heg as establecimiento,
+      numerador_heg as numerador,denominador_heg as denominador,porcentaje_heg as porcentaje,detalle_indtp as periodo,
+      responsable_medicion_heg as responsable, extract(year from date(fecha_medicion_heg)) as anio
+      from her_encabezado_general a, ind_tiempo b
+      where a.ide_indtp=b.ide_indtp and ide_segdis=$1 and nro_herramienta_heg=$2 and ide_seges=${establecimiento}`
+    }else{
+      sql=`SELECT ide_heg,b.ide_indtp,fecha_medicion_heg as fecha,nro_herramienta_heg as indicador,unidad_operativa_heg as establecimiento,
+      numerador_heg as numerador,denominador_heg as denominador,porcentaje_heg as porcentaje,detalle_indtp as periodo,
+      responsable_medicion_heg as responsable, extract(year from date(fecha_medicion_heg)) as anio
+      FROM (
+          SELECT *,
+                 ROW_NUMBER() OVER (PARTITION BY unidad_operativa_heg, nro_herramienta_heg ORDER BY fecha_medicion_heg DESC) AS rn
+          FROM her_encabezado_general
+      ) AS subconsulta
+      inner join ind_tiempo b on b.ide_indtp=subconsulta.ide_indtp
+      WHERE rn = 1 and ide_segdis=$1 and nro_herramienta_heg=$2`;
     }
 
-    sql += "  order by ide_heg desc"
+    sql += "  order by ide_heg,ide_indtp desc"
 
     try {
 
