@@ -92,6 +92,21 @@ export class CreateHerramientaUnoDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsNumber()
+    promedio_estacion_enfermeria_hlic: number;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    promedio_sala_cirugia_hlic: number;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    promedio_material_anestesia_hlic: number;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
     items_cumple_hlic: number;
 
     @ApiProperty()
@@ -103,6 +118,7 @@ export class CreateHerramientaUnoDto {
     @IsNotEmpty()
     @IsNumber()
     porcentaje_estandar_hlic: number;
+    
 
     @ApiProperty()
     @IsNotEmpty()
@@ -136,6 +152,18 @@ export class CreateHerramientaUnoDto {
     @ApiProperty()
     @IsNotEmpty()
     atencion_nacido: InsumoDto[];
+
+    @ApiProperty()
+    @IsNotEmpty()
+    estacion_enfermeria: InsumoDto[];
+
+    @ApiProperty()
+    @IsNotEmpty()
+    sala_cirugia: InsumoDto[];
+
+    @ApiProperty()
+    @IsNotEmpty()
+    material_anestesia: InsumoDto[];
 
 
 }

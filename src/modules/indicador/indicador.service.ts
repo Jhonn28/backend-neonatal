@@ -52,9 +52,9 @@ export class IndicadorService {
 
   async guardarHUno(newHUno: CreateHerramientaUnoDto) {
     try {
-      const { atencion_nacido, charol_emergencia, consultorio, atencion_parto, distrito_hlic, establecimiento_hlic, farmacia, fecha_medicion_hlic, ide_segdis, ide_seges, insumos, items_cumple_hlic, laboratorio, ide_indtp, porcentaje_estandar_hlic, promedio_atencion_nacido_hlic, promedio_atencion_parto_hlic, promedio_charol_hlic, promedio_farmacia_hlic, promedio_gineco_hlic, promedio_laboratorio_hlic, promedio_preparacion_hlic, promedio_servicio_hlic, provincia_hlic, responsable_medicion_hlic, servicio, total_items_hlic, zona_hlic } = newHUno;
+      const { atencion_nacido, charol_emergencia, consultorio, atencion_parto,estacion_enfermeria,sala_cirugia,material_anestesia, distrito_hlic, establecimiento_hlic, farmacia, fecha_medicion_hlic, ide_segdis, ide_seges, insumos, items_cumple_hlic, laboratorio, ide_indtp, porcentaje_estandar_hlic, promedio_atencion_nacido_hlic, promedio_atencion_parto_hlic, promedio_charol_hlic, promedio_farmacia_hlic, promedio_gineco_hlic, promedio_laboratorio_hlic, promedio_preparacion_hlic, promedio_servicio_hlic, promedio_estacion_enfermeria_hlic,promedio_sala_cirugia_hlic,promedio_material_anestesia_hlic,provincia_hlic, responsable_medicion_hlic, servicio, total_items_hlic, zona_hlic } = newHUno;
 
-      const encabezado = { ide_seges, ide_segdis, zona_hlic, provincia_hlic, distrito_hlic, establecimiento_hlic, fecha_medicion_hlic, ide_indtp, responsable_medicion_hlic, promedio_preparacion_hlic, promedio_gineco_hlic, promedio_farmacia_hlic, promedio_laboratorio_hlic, promedio_servicio_hlic, promedio_charol_hlic, promedio_atencion_parto_hlic, promedio_atencion_nacido_hlic, items_cumple_hlic, total_items_hlic, porcentaje_estandar_hlic }
+      const encabezado = { ide_seges, ide_segdis, zona_hlic, provincia_hlic, distrito_hlic, establecimiento_hlic, fecha_medicion_hlic, ide_indtp, responsable_medicion_hlic, promedio_preparacion_hlic, promedio_gineco_hlic, promedio_farmacia_hlic, promedio_laboratorio_hlic, promedio_servicio_hlic, promedio_charol_hlic, promedio_atencion_parto_hlic, promedio_atencion_nacido_hlic, promedio_estacion_enfermeria_hlic,promedio_sala_cirugia_hlic,promedio_material_anestesia_hlic,items_cumple_hlic, total_items_hlic, porcentaje_estandar_hlic }
 
       const sql = `select count(ide_heg) as registros
       from her_encabezado_general a, ind_tiempo b
@@ -102,6 +102,18 @@ export class IndicadorService {
         await this.guardarInsumo(element);
       });
       servicio.forEach(async element => {
+        element['ide_hlic'] = +ide_hlic;
+        await this.guardarInsumo(element);
+      });
+      estacion_enfermeria.forEach(async element => {
+        element['ide_hlic'] = +ide_hlic;
+        await this.guardarInsumo(element);
+      });
+      sala_cirugia.forEach(async element => {
+        element['ide_hlic'] = +ide_hlic;
+        await this.guardarInsumo(element);
+      });
+      material_anestesia.forEach(async element => {
         element['ide_hlic'] = +ide_hlic;
         await this.guardarInsumo(element);
       });
@@ -326,16 +338,17 @@ export class IndicadorService {
     let sql = '';
 
     if (establecimiento) {
-      sql = ` select b.ide_indtp,ide_hlic,establecimiento_hlic,fecha_medicion_hlic,distrito_hlic,ide_seges,ide_segdis,promedio_preparacion_hlic,
+      sql = ` select ide_seges,b.ide_indtp,ide_hlic,establecimiento_hlic,fecha_medicion_hlic,distrito_hlic,ide_seges,ide_segdis,promedio_preparacion_hlic,
       promedio_preparacion_hlic,promedio_farmacia_hlic,promedio_laboratorio_hlic,promedio_servicio_hlic,promedio_charol_hlic,
-      promedio_atencion_parto_hlic,promedio_atencion_nacido_hlic,items_cumple_hlic,total_items_hlic,porcentaje_estandar_hlic,
+      promedio_atencion_parto_hlic,promedio_atencion_nacido_hlic,promedio_gineco_hlic,promedio_estacion_enfermeria_hlic,promedio_sala_cirugia_hlic
+      ,promedio_material_anestesia_hlic,items_cumple_hlic,total_items_hlic,porcentaje_estandar_hlic,
       detalle_indtp
       from her_lista_chequeo a, ind_tiempo b
       where a.ide_indtp=b.ide_indtp and ide_segdis=$1 and ide_seges=${establecimiento}`
     }else{
-      sql = `SELECT b.ide_indtp,ide_hlic,establecimiento_hlic,fecha_medicion_hlic,distrito_hlic,ide_seges,ide_segdis,promedio_preparacion_hlic,
+      sql = `SELECT ide_seges,b.ide_indtp,ide_hlic,establecimiento_hlic,fecha_medicion_hlic,distrito_hlic,ide_seges,ide_segdis,promedio_preparacion_hlic,
       promedio_preparacion_hlic,promedio_farmacia_hlic,promedio_laboratorio_hlic,promedio_servicio_hlic,promedio_charol_hlic,
-      promedio_atencion_parto_hlic,promedio_atencion_nacido_hlic,items_cumple_hlic,total_items_hlic,porcentaje_estandar_hlic,
+      promedio_atencion_parto_hlic,promedio_atencion_nacido_hlic,promedio_estacion_enfermeria_hlic,promedio_sala_cirugia_hlic,promedio_material_anestesia_hlic,promedio_gineco_hlic,items_cumple_hlic,total_items_hlic,porcentaje_estandar_hlic,
       detalle_indtp
   FROM (
       SELECT *,
@@ -345,7 +358,7 @@ export class IndicadorService {
   inner join ind_tiempo b on b.ide_indtp=subconsulta.ide_indtp
   WHERE rn = 1 and ide_segdis=$1`
     }
-    sql += "  order by ide_hlic,ide_indtp desc"
+    sql += "  order by ide_hlic desc"
 
     try {
 
