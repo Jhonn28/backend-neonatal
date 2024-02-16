@@ -56,9 +56,9 @@ export class IndicadorService {
 
       const encabezado = { ide_seges, ide_segdis, zona_hlic, provincia_hlic, distrito_hlic, establecimiento_hlic, fecha_medicion_hlic, ide_indtp, responsable_medicion_hlic, promedio_preparacion_hlic, promedio_gineco_hlic, promedio_farmacia_hlic, promedio_laboratorio_hlic, promedio_servicio_hlic, promedio_charol_hlic, promedio_atencion_parto_hlic, promedio_atencion_nacido_hlic, promedio_estacion_enfermeria_hlic,promedio_sala_cirugia_hlic,promedio_material_anestesia_hlic,items_cumple_hlic, total_items_hlic, porcentaje_estandar_hlic }
 
-      const sql = `select count(ide_heg) as registros
-      from her_encabezado_general a, ind_tiempo b
-      where a.ide_indtp=b.ide_indtp and a.ide_indtp=${ide_indtp} and extract(year from date(fecha_medicion_heg))= extract(year from date('${fecha_medicion_hlic}'))`
+      const sql = `select count(ide_hlic) as registros
+      from her_lista_chequeo a, ind_tiempo b
+      where a.ide_indtp=b.ide_indtp and a.ide_indtp=${ide_indtp} and extract(year from date(fecha_medicion_hlic))= extract(year from date('${fecha_medicion_hlic}'))`
 
 
       const registros = await this.poolService.consult(sql);
