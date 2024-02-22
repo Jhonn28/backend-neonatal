@@ -487,7 +487,7 @@ export class IndicadorService {
 
   //obtiene el ultimo puntaje de todos los indicadores
 
-  async getPuntaje(ide: number) {
+  async getPuntaje(ide: number,anio:string) {
     let array = {
       'unoNueve': [],
       'diez': Number,
@@ -496,113 +496,115 @@ export class IndicadorService {
       'trece': Number
     }
 
-    let sql = `select porcentaje_estandar_hlic as porcentaje
-    from her_lista_chequeo where ide_seges=$1 order by ide_hlic desc limit 1;`
+    let sql = `select round(avg(porcentaje_estandar_hlic),2) as porcentaje
+    from her_lista_chequeo where ide_segdis=$1 and extract(year from date(fecha_medicion_hlic))= extract(year from date('${anio}'))`
     let consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='2' order by ide_heg desc limit 1;`
+    console.log(sql);
+
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='2'   and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'))`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='3a' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='3a'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='3b' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='3b'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='4' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='4'   and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'))`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='5' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='5'   and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'))`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='6' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='6'   and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'))`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='7a' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='7a'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='7b' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='7b'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8a' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='8a'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8b' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='8b'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8c' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='8c'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8d' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='8d'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8e' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='8e'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='8f' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='8f'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='9a' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='9a'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='9b' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='9b'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='9c' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='9c'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.unoNueve.push(consult[0]);
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='10' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='10'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.diez = consult[0];
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='11' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='11'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.once = consult[0];
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='12' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='12'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.doce = consult[0];
 
-    sql = `select porcentaje_heg as porcentaje
-    from her_encabezado_general where ide_seges=$1 and nro_herramienta_heg='13' order by ide_heg desc limit 1;`
+    sql = `select round(avg(porcentaje_heg),2) as porcentaje
+    from her_encabezado_general where ide_segdis=$1 and nro_herramienta_heg='13'  and extract(year from date(fecha_medicion_heg))= extract(year from date('${anio}'));`
     consult = await this.poolService.consult(sql, [ide]);
     array.trece = consult[0];
 

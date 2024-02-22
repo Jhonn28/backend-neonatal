@@ -98,9 +98,9 @@ export class IndicadorController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('puntaje/:establecimiento')
-  GetPuntaje(@Param('establecimiento') establecimiento: number) {
-    return this.indicadorService.getPuntaje(establecimiento);
+  @Get('puntaje/:distrito')
+  GetPuntaje(@Param('distrito') distrito: number,@Query('fecha') fecha: string) {
+    return this.indicadorService.getPuntaje(distrito,fecha);
   }
 
 
