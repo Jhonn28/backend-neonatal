@@ -52,13 +52,13 @@ export class IndicadorService {
 
   async guardarHUno(newHUno: CreateHerramientaUnoDto) {
     try {
-      const { atencion_nacido, charol_emergencia, consultorio, atencion_parto,estacion_enfermeria,sala_cirugia,material_anestesia, distrito_hlic, establecimiento_hlic, farmacia, fecha_medicion_hlic, ide_segdis, ide_seges, insumos, items_cumple_hlic, laboratorio, ide_indtp, porcentaje_estandar_hlic, promedio_atencion_nacido_hlic, promedio_atencion_parto_hlic, promedio_charol_hlic, promedio_farmacia_hlic, promedio_gineco_hlic, promedio_laboratorio_hlic, promedio_preparacion_hlic, promedio_servicio_hlic, promedio_estacion_enfermeria_hlic,promedio_sala_cirugia_hlic,promedio_material_anestesia_hlic,provincia_hlic, responsable_medicion_hlic, servicio, total_items_hlic, zona_hlic } = newHUno;
+      const { atencion_nacido, charol_emergencia, consultorio, atencion_parto, estacion_enfermeria, sala_cirugia, material_anestesia, distrito_hlic, establecimiento_hlic, farmacia, fecha_medicion_hlic, ide_segdis, ide_seges, insumos, items_cumple_hlic, laboratorio, ide_indtp, porcentaje_estandar_hlic, promedio_atencion_nacido_hlic, promedio_atencion_parto_hlic, promedio_charol_hlic, promedio_farmacia_hlic, promedio_gineco_hlic, promedio_laboratorio_hlic, promedio_preparacion_hlic, promedio_servicio_hlic, promedio_estacion_enfermeria_hlic, promedio_sala_cirugia_hlic, promedio_material_anestesia_hlic, provincia_hlic, responsable_medicion_hlic, servicio, total_items_hlic, zona_hlic } = newHUno;
 
-      const encabezado = { ide_seges, ide_segdis, zona_hlic, provincia_hlic, distrito_hlic, establecimiento_hlic, fecha_medicion_hlic, ide_indtp, responsable_medicion_hlic, promedio_preparacion_hlic, promedio_gineco_hlic, promedio_farmacia_hlic, promedio_laboratorio_hlic, promedio_servicio_hlic, promedio_charol_hlic, promedio_atencion_parto_hlic, promedio_atencion_nacido_hlic, promedio_estacion_enfermeria_hlic,promedio_sala_cirugia_hlic,promedio_material_anestesia_hlic,items_cumple_hlic, total_items_hlic, porcentaje_estandar_hlic }
+      const encabezado = { ide_seges, ide_segdis, zona_hlic, provincia_hlic, distrito_hlic, establecimiento_hlic, fecha_medicion_hlic, ide_indtp, responsable_medicion_hlic, promedio_preparacion_hlic, promedio_gineco_hlic, promedio_farmacia_hlic, promedio_laboratorio_hlic, promedio_servicio_hlic, promedio_charol_hlic, promedio_atencion_parto_hlic, promedio_atencion_nacido_hlic, promedio_estacion_enfermeria_hlic, promedio_sala_cirugia_hlic, promedio_material_anestesia_hlic, items_cumple_hlic, total_items_hlic, porcentaje_estandar_hlic }
 
       const sql = `select count(ide_hlic) as registros
       from her_lista_chequeo a, ind_tiempo b
-      where a.ide_indtp=b.ide_indtp and a.ide_indtp=${ide_indtp} and extract(year from date(fecha_medicion_hlic))= extract(year from date('${fecha_medicion_hlic}'))`
+      where a.ide_indtp=b.ide_indtp and a.ide_indtp=${ide_indtp} and extract(year from date(fecha_medicion_hlic))= extract(year from date('${fecha_medicion_hlic}')) and a.ide_seges=${ide_seges}`
 
 
       const registros = await this.poolService.consult(sql);
@@ -345,7 +345,7 @@ export class IndicadorService {
       detalle_indtp
       from her_lista_chequeo a, ind_tiempo b
       where a.ide_indtp=b.ide_indtp and ide_segdis=$1 and ide_seges=${establecimiento}`
-    }else{
+    } else {
       sql = `SELECT ide_seges,b.ide_indtp,ide_hlic,establecimiento_hlic,fecha_medicion_hlic,distrito_hlic,ide_seges,ide_segdis,promedio_preparacion_hlic,
       promedio_preparacion_hlic,promedio_farmacia_hlic,promedio_laboratorio_hlic,promedio_servicio_hlic,promedio_charol_hlic,
       promedio_atencion_parto_hlic,promedio_atencion_nacido_hlic,promedio_estacion_enfermeria_hlic,promedio_sala_cirugia_hlic,promedio_material_anestesia_hlic,promedio_gineco_hlic,items_cumple_hlic,total_items_hlic,porcentaje_estandar_hlic,
@@ -409,8 +409,8 @@ export class IndicadorService {
       responsable_medicion_heg as responsable, extract(year from date(fecha_medicion_heg)) as anio
       from her_encabezado_general a, ind_tiempo b
       where a.ide_indtp=b.ide_indtp and ide_segdis=$1 and nro_herramienta_heg=$2 and ide_seges=${establecimiento}`
-    }else{
-      sql=`SELECT ide_heg,b.ide_indtp,fecha_medicion_heg as fecha,nro_herramienta_heg as indicador,unidad_operativa_heg as establecimiento,
+    } else {
+      sql = `SELECT ide_heg,b.ide_indtp,fecha_medicion_heg as fecha,nro_herramienta_heg as indicador,unidad_operativa_heg as establecimiento,
       numerador_heg as numerador,denominador_heg as denominador,porcentaje_heg as porcentaje,detalle_indtp as periodo,
       responsable_medicion_heg as responsable, extract(year from date(fecha_medicion_heg)) as anio
       FROM (
@@ -679,6 +679,144 @@ FROM
 GROUP BY
     indicador
 ORDER BY
+    indicador asc;`
+    const consult_3 = await this.poolService.consult(sql, [anio, ide]);
+
+    array = [...consult_1, ...consult_2, ...consult_3]
+
+
+    try {
+      const data = array;
+      return {
+        success: true,
+        data
+      };
+    } catch (error) {
+      throw new BadRequestException({
+        success: false,
+        message: 'Error al ejecutar query'
+      });
+    }
+  }
+
+  async getReporteDistritoTrimestral(anio: string, ide: number, trimestre: number) {
+    let array = new Array();
+    let sql = '';
+    trimestre = Number(trimestre);
+    switch (trimestre) {
+      case 1:
+        sql += `SELECT
+        '1' as indicador,
+        COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=13 THEN a.items_cumple_hlic END)),0) AS numerador,
+        COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=13 THEN a.total_items_hlic END)),0) AS denominador `
+        break;
+      case 2:
+        console.log('emtrp a 2');
+        sql += `SELECT
+        '1' as indicador,
+        COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=14 THEN a.items_cumple_hlic END)),0) AS numerador,
+        COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=14 THEN a.total_items_hlic END)),0) AS denominador`;
+        break;
+      case 3:
+        console.log('emtrp a 3');
+        sql += `SELECT
+        '1' as indicador,
+        COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=15 THEN a.items_cumple_hlic END)),0) AS numerador,
+        COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=15 THEN a.total_items_hlic END)),0) AS denominador`;
+        break;
+      case 4:
+        console.log('emtrp a 4');
+        sql += `SELECT
+        '1' as indicador,
+        COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=16 THEN a.items_cumple_hlic END)),0) AS numerador,
+        COALESCE(TRUNC(SUM(CASE WHEN b.ide_indtp=16 THEN a.total_items_hlic END)),0) AS denominador`
+        break;
+      default:
+        console.log('no entro a ninguno');
+        break;
+    }
+    sql += `
+        FROM
+        her_lista_chequeo a, ind_tiempo b
+        WHERE a.ide_indtp = b.ide_indtp  and extract(year from date(fecha_medicion_hlic))=$1 and a.ide_segdis=$2
+        GROUP BY
+        indicador
+        ORDER BY
+        indicador asc;`
+    const consult_1 = await this.poolService.consult(sql, [anio, ide]);
+    sql = '';
+
+    switch (trimestre) {
+      case 1:
+        sql += `SELECT
+        a.nro_herramienta_heg as indicador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 1 AND 3 THEN a.numerador_heg END),0) AS numerador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 1 AND 3 THEN a.denominador_heg END),0) AS denominador`
+        break;
+      case 2:
+        sql += `SELECT
+        a.nro_herramienta_heg as indicador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 4 AND 6 THEN a.numerador_heg END),0) AS numerador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 4 AND 6 THEN a.denominador_heg END),0) AS denominador`;
+        break;
+      case 3:
+        sql += `SELECT
+        a.nro_herramienta_heg as indicador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 7 AND 9 THEN a.numerador_heg END),0) AS numerador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 7 AND 9 THEN a.denominador_heg END),0) AS denominador`;
+        break;
+      case 4:
+        sql += `SELECT
+        a.nro_herramienta_heg as indicador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 10 AND 12 THEN a.numerador_heg END),0) AS numerador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp BETWEEN 10 AND 12 THEN a.denominador_heg END),0) AS denominador`
+        break;
+    }
+
+    sql += `
+        FROM
+        her_encabezado_general a, ind_tiempo b
+        WHERE a.ide_indtp = b.ide_indtp and a.ide_indtp<13 and nro_herramienta_heg != '8' and extract(year from date(fecha_medicion_heg))=$1 and a.ide_segdis=$2
+        GROUP BY
+        indicador
+        ORDER BY
+        indicador asc;`
+    const consult_2 = await this.poolService.consult(sql, [anio, ide]);
+
+    sql = '';
+    switch (trimestre) {
+      case 1:
+        sql += `SELECT
+        a.nro_herramienta_heg as indicador,
+         0 AS numerador,
+         0 AS denominador `
+        break;
+      case 2:
+        sql += `SELECT
+        a.nro_herramienta_heg as indicador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp=17 THEN a.numerador_heg END),0) AS numerador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp=17 THEN a.denominador_heg END),0) AS denominador`;
+        break;
+      case 3:
+        sql += `SELECT
+        a.nro_herramienta_heg as indicador,
+        0 AS numerador,
+        0 AS denominador`;
+        break;
+      case 4:
+        sql += `SELECT
+        a.nro_herramienta_heg as indicador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp=18 THEN a.numerador_heg END),0) AS numerador,
+        COALESCE(SUM(CASE WHEN b.ide_indtp=18 THEN a.denominador_heg END),0) AS denominador`
+        break;
+    }
+    sql += `
+    FROM
+    her_encabezado_general a, ind_tiempo b
+	  WHERE a.ide_indtp = b.ide_indtp and a.ide_indtp in (17,18) and extract(year from date(fecha_medicion_heg))=$1 and ide_segdis=$2
+    GROUP BY
+    indicador
+    ORDER BY
     indicador asc;`
     const consult_3 = await this.poolService.consult(sql, [anio, ide]);
 

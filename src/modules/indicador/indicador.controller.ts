@@ -111,6 +111,12 @@ export class IndicadorController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('reporte-distrito-trimestral/:distrito/:anio/:trimestre')
+  getReporteDistritoTrimestral(@Param('anio') anio: string,@Param('distrito') distrito: number,@Param('trimestre') trimestre: number) {
+    return this.indicadorService.getReporteDistritoTrimestral(anio,distrito,trimestre);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('reporte-zonal/:anio')
   getReporteZonal(@Param('anio') anio: string) {
     return this.indicadorService.getReporteZonal(anio);
